@@ -9,8 +9,12 @@ import "../styles/Header.scss";
 
 const ALLOWED_SYMBOLS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,";
 
-const Header: React.FC = () => {
-  const [tag, setTag] = useState("");
+interface Props {
+  tagValue: string;
+  setTagValue: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const Header: React.FC<Props> = ({ setTagValue, tagValue }) => {
   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
@@ -20,11 +24,11 @@ const Header: React.FC = () => {
 
   const onImageAdd = async () => {
     // Проверяем поле ввода на пустоту
-    if (tag.trim() === "") {
+    if (tagValue.trim() === "") {
       return alert("Заполните поле тег");
     }
     setLoading(true);
-    const tags = tag.split(",");
+    const tags = tagValue.split(",");
     // Асинхронно получаем картинки по заданным тегам
     const urls: Array<string> = await Promise.all(
       tags.map(async (tag: string) => {
@@ -43,7 +47,7 @@ const Header: React.FC = () => {
         }
       })
     );
-    setTag("");
+    setTagValue("");
     setLoading(false);
     // Диспатчим картинку/составную картинку в redux
     if (tags.length > 0) {
@@ -75,7 +79,7 @@ const Header: React.FC = () => {
             type="text"
             className="header__input"
             placeholder="Введите тег..."
-            value={tag}
+            value={tagValue}
             onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
               // Валидация на латинские буквы и ,
               if (
@@ -83,7 +87,7 @@ const Header: React.FC = () => {
                   .split("")
                   .every((symbol) => ALLOWED_SYMBOLS.includes(symbol))
               ) {
-                setTag(evt.target.value);
+                setTagValue(evt.target.value);
               }
             }}
             onKeyPress={(evt: React.KeyboardEvent) => {
@@ -103,7 +107,7 @@ const Header: React.FC = () => {
             onClick={(evt: React.SyntheticEvent<HTMLButtonElement>) => {
               dispatch(clearImages());
               dispatch(clearGroups());
-              setTag("");
+              setTagValue("");
             }}
           >
             Очистить
