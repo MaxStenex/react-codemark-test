@@ -1,46 +1,29 @@
-# Getting Started with Create React App
+## Запуск проекта
+`npm install` 
+`npm start`
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Тестовое задание
+Описание задание
+Необходимо реализовать приложение "каталог изображений". Приложение состоит из 1 страницы на которой находятся следующие элементы:
+# 1. Текстовое поле ввода тега
+# 2. Кнопка "Загрузить"
+# 3. Кнопка "Очистить"
+# 4. Кнопка "Группировать" / "Разгруппировать"
+# 5. Список изображений
 
-## Available Scripts
-
-In the project directory, you can run:
-
-### `yarn start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Доступные действия пользователя
+Заполнение поля тега
+Нажатие на кнопку "Загрузить". Если поле ввода тега пустое - отображается всплывающее уведомление "заполните поле 'тег'",
+иначе происходит http запрос к api giphy (описание api ниже), на время загрузки кнопка блокируется, а текст меняется на "Загрузка...".
+Затем происходит одно из следующего:
+Если по тегу ничего не найдено — отображается всплывающее уведомление 'По тегу ничего не найдено'",
+Если произошла http ошибка — отображается всплывающее уведомление 'Произошла http ошибки'"
+При успешном получении данных изображения — добавляется изображение в список изображений
+При нажатии на кнопку "Очистить" — поле ввода тега и список изображений очищается
+При нажатии на кнопку "Группировать" — изображения группируются по тегу, тег пишется как заголовок над группой. Текст кнопки меняется на "Разгруппировать"
+При нажатии на кнопку "Разгруппировать" — изображения отображаются друг за другом по очерёдности загрузки. Текст кнопки меняется на "Группировать"
+При нажатии на изображение поле ввода тега заполняется тегом, по которому искалось изображение
+При вводе значений через запятую (“cat, dog”) считается что мы указали составной тэг. Для составного тэга параллельно выполняются запросы к api на получение каждого элемента составного тэга. В нашем примере это 2 запроса: https://api.giphy.com/v1/gifs/random?api_key=${API_KEY}C&tag=cat и https://api.giphy.com/v1/gifs/random?api_key=${API_KEY}C&tag=dog. После завершения всех запросов в галерею добавляется составная картинка, состоящая из совокупности результатов каждого запроса.
+Ввод любых символов в поле кроме букв латинского алфавита и “,” запрещен
+При указании значения “delay” выполняются запросы с рандомным тегом (не более 10 символов), между запросами задержка в 5 секунд
+Начальное состояние приложения: Поле ввода тега пустое, список изображений пуст, группировка не применена.
