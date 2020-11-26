@@ -1,6 +1,8 @@
+import { ImagesActionTypes, ImagesActions } from "./actions";
+
 export interface Image {
-  tag: string;
-  imageURL: string;
+  tags: Array<string>;
+  imageURLs: Array<string>;
 }
 
 export interface ImagesStateType {
@@ -11,8 +13,11 @@ const initialState: ImagesStateType = {
   allImages: [],
 };
 
-const imagesReducer = (state = initialState, action: any): ImagesStateType => {
+const imagesReducer = (state = initialState, action: ImagesActions): ImagesStateType => {
   switch (action.type) {
+    case ImagesActionTypes.ADD_IMAGE: {
+      return { ...state, allImages: [...state.allImages, action.payload.image] };
+    }
     default: {
       return state;
     }
