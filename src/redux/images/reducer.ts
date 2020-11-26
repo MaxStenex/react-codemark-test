@@ -5,14 +5,19 @@ export interface Image {
   imageURLs: Array<string>;
 }
 
+export interface ImageGroup {
+  tag: string;
+  images: Array<Image>;
+}
+
 export interface ImagesStateType {
   allImages: Array<Image>;
-  groupedImages: Array<Image>;
+  imagesGroups: Array<ImageGroup>;
 }
 
 const initialState: ImagesStateType = {
   allImages: [],
-  groupedImages: [],
+  imagesGroups: [],
 };
 
 const imagesReducer = (state = initialState, action: ImagesActions): ImagesStateType => {
@@ -22,6 +27,9 @@ const imagesReducer = (state = initialState, action: ImagesActions): ImagesState
     }
     case ImagesActionTypes.CLEAR_IMAGES: {
       return { ...state, allImages: [] };
+    }
+    case ImagesActionTypes.GROUP_IMAGES: {
+      return { ...state, imagesGroups: action.payload.imagesGroups };
     }
     default: {
       return state;

@@ -1,13 +1,22 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { instance } from "../api";
-import { addImage, clearImages } from "../redux/images/actions";
+import { addGroups, clearGroups, toggleGrouped } from "../redux/groups/actions";
+import { addImage, clearImages, groupImages } from "../redux/images/actions";
+import { Image, ImageGroup } from "../redux/images/reducer";
+import { RootStateType } from "../redux/rootReducer";
 import "../styles/Header.scss";
+
+const ALLOWED_SYMBOLS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,";
 
 const Header: React.FC = () => {
   const [tag, setTag] = useState("");
   const [loading, setLoading] = useState(false);
+
   const dispatch = useDispatch();
+  const allImages = useSelector((state: RootStateType) => state.images.allImages);
+  const groupsTags = useSelector((state: RootStateType) => state.groups.groupsTags);
+  const isGrouped = useSelector((state: RootStateType) => state.groups.grouped);
 
   const onImageAdd = async () => {
     // Проверяем поле ввода на пустоту
@@ -37,7 +46,25 @@ const Header: React.FC = () => {
     setTag("");
     setLoading(false);
     // Диспатчим картинку/составную картинку в redux
-    if (tags.length > 0) dispatch(addImage(tags, urls));
+    if (tags.length > 0) {
+      dispatch(addImage(tags, urls));
+      dispatch(addGroups(tags));
+    }
+  };
+
+  const onImageGrouping = () => {
+    if (isGrouped === false) {
+      const imageGroups: Array<ImageGroup> = [];
+      // eslint-disable-next-line array-callback-return
+      groupsTags.map((tag: string) => {
+        const filteredByTagImages = allImages.filter((image: Image) =>
+          image.tags.includes(tag)
+        );
+        imageGroups.push({ tag, images: filteredByTagImages });
+      });
+      dispatch(groupImages(imageGroups));
+    }
+    dispatch(toggleGrouped());
   };
 
   return (
@@ -49,9 +76,16 @@ const Header: React.FC = () => {
             className="header__input"
             placeholder="Введите тег..."
             value={tag}
-            onChange={(evt: React.ChangeEvent<HTMLInputElement>) =>
-              setTag(evt.target.value)
-            }
+            onChange={(evt: React.ChangeEvent<HTMLInputElement>) => {
+              // Валидация на латинские буквы и ,
+              if (
+                evt.target.value
+                  .split("")
+                  .every((symbol) => ALLOWED_SYMBOLS.includes(symbol))
+              ) {
+                setTag(evt.target.value);
+              }
+            }}
             onKeyPress={(evt: React.KeyboardEvent) => {
               if (evt.key === "Enter") {
                 onImageAdd();
@@ -68,11 +102,18 @@ const Header: React.FC = () => {
             className="header__clear-btn"
             onClick={(evt: React.SyntheticEvent<HTMLButtonElement>) => {
               dispatch(clearImages());
+              dispatch(clearGroups());
+              setTag("");
             }}
           >
             Очистить
           </button>
-          <button className="header__group-btn">Разгруппировать</button>
+          <button
+            className="header__group-btn"
+            onClick={(evt: React.SyntheticEvent<HTMLButtonElement>) => onImageGrouping()}
+          >
+            {isGrouped ? "Разгруппировать" : "Группировать"}
+          </button>
         </div>
       </div>
     </header>

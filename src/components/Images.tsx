@@ -1,29 +1,22 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Image } from "../redux/images/reducer";
 import { RootStateType } from "../redux/rootReducer";
-import "../styles/Images.scss";
+import GroupedImages from "./GroupedImages";
+import UngroupedImages from "./UngroupedImages";
 
 const Images: React.FC = () => {
   const images = useSelector((state: RootStateType) => state.images.allImages);
+  const imagesGroups = useSelector((state: RootStateType) => state.images.imagesGroups);
+  const isGrouped = useSelector((state: RootStateType) => state.groups.grouped);
 
   return (
     <section className="images">
       <div className="container">
-        <div className="images__main">
-          {images.map((image: Image, index) => {
-            // Проходимся по массиву, и возвращаем картинку или составную картинку
-            return (
-              <div className="images__block" key={image.imageURLs[0]}>
-                {image.imageURLs.map((imageURL) => {
-                  return (
-                    <img key={imageURL} className="images__image" src={imageURL} alt="" />
-                  );
-                })}
-              </div>
-            );
-          })}
-        </div>
+        {isGrouped ? (
+          <GroupedImages imagesGroups={imagesGroups} />
+        ) : (
+          <UngroupedImages images={images} />
+        )}
       </div>
     </section>
   );

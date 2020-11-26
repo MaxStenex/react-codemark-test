@@ -1,4 +1,4 @@
-import { Image } from "./reducer";
+import { Image, ImageGroup } from "./reducer";
 
 export enum ImagesActionTypes {
   ADD_IMAGE = "ADD_IMAGE",
@@ -6,7 +6,7 @@ export enum ImagesActionTypes {
   GROUP_IMAGES = "GROUP_IMAGES",
 }
 
-export type ImagesActions = AddImageType | ClearImagesType;
+export type ImagesActions = AddImageType | ClearImagesType | GroupImagesType;
 
 interface AddImageType {
   type: ImagesActionTypes.ADD_IMAGE;
@@ -39,11 +39,16 @@ export const clearImages = (): ClearImagesType => {
 
 interface GroupImagesType {
   type: ImagesActionTypes.GROUP_IMAGES;
+  payload: {
+    imagesGroups: Array<ImageGroup>;
+  };
 }
 
-export const groupImages = () => {
+export const groupImages = (imagesGroups: Array<ImageGroup>): GroupImagesType => {
   return {
     type: ImagesActionTypes.GROUP_IMAGES,
-    payload: {},
+    payload: {
+      imagesGroups,
+    },
   };
 };
