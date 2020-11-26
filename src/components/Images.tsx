@@ -14,7 +14,7 @@ const Images: React.FC = () => {
           {images.map((image: Image, index) => {
             // Проходимся по массиву, и возвращаем картинку или составную картинку
             return (
-              <div className="images__block" key={index}>
+              <div className="images__block" key={image.imageURLs[0]}>
                 {image.imageURLs.map((imageURL) => {
                   return (
                     <img key={imageURL} className="images__image" src={imageURL} alt="" />

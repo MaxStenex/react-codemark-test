@@ -1,12 +1,12 @@
 .images {
   &__main {
     display: flex;
-    justify-content: space-between;
     flex-wrap: wrap;
   }
 
   &__block {
     flex: 1 1 300px;
+    max-width: 331px;
     display: flex;
     height: 350px;
     margin-right: 15px;
