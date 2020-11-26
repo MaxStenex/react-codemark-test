@@ -1,0 +1,54 @@
+.header {
+  padding: 30px 0px;
+  &__main {
+    display: flex;
+    padding: 0px 100px;
+    & button {
+      font-size: 16px;
+      margin-right: 10px;
+      padding: 7px;
+      border-radius: 5px;
+      color: #fff;
+      transition: 0.15s;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  &__input {
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 3px 15px 3px 5px;
+    flex: 1;
+    margin-right: 25px;
+    font-size: 17px;
+  }
+
+  &__load-btn {
+    background-color: green;
+    border: 2px solid green;
+    &:hover {
+      background-color: #fff;
+      color: green;
+    }
+  }
+
+  &__clear-btn {
+    background-color: red;
+    border: 2px solid red;
+    &:hover {
+      background-color: #fff;
+      color: red;
+    }
+  }
+
+  &__group-btn {
+    background-color: blue;
+    border: 2px solid blue;
+    &:hover {
+      background-color: #fff;
+      color: blue;
+    }
+  }
+}
