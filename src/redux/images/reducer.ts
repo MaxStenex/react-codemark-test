@@ -18,6 +18,9 @@ const imagesReducer = (state = initialState, action: ImagesActions): ImagesState
     case ImagesActionTypes.ADD_IMAGE: {
       return { ...state, allImages: [...state.allImages, action.payload.image] };
     }
+    case ImagesActionTypes.CLEAR_IMAGE: {
+      return { ...state, allImages: [] };
+    }
     default: {
       return state;
     }

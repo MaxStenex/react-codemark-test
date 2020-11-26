@@ -2,9 +2,10 @@ import { Image } from "./reducer";
 
 export enum ImagesActionTypes {
   ADD_IMAGE = "ADD_IMAGE",
+  CLEAR_IMAGE = "CLEAR_IMAGE",
 }
 
-export type ImagesActions = AddImageType;
+export type ImagesActions = AddImageType | ClearImagesType;
 
 interface AddImageType {
   type: ImagesActionTypes.ADD_IMAGE;
@@ -22,5 +23,15 @@ export const addImage = (tags: Array<string>, imageURLs: Array<string>): AddImag
         imageURLs,
       },
     },
+  };
+};
+
+interface ClearImagesType {
+  type: ImagesActionTypes.CLEAR_IMAGE;
+}
+
+export const clearImages = (): ClearImagesType => {
+  return {
+    type: ImagesActionTypes.CLEAR_IMAGE,
   };
 };
